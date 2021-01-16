@@ -1,0 +1,6 @@
+http:
+  port: "8081"
+  
+db:
+  user: "rootapp1"
+  password: "Shakthi3$"

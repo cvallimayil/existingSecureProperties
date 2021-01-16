@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule
+	xmlns:secure-properties="http://www.mulesoft.org/schema/mule/secure-properties"
+	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/secure-properties http://www.mulesoft.org/schema/mule/secure-properties/current/mule-secure-properties.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="1fafb9f4-0250-4c40-baf1-30a42275cf24" >
+		<http:listener-connection host="0.0.0.0" port="${http.port}" />
+	</http:listener-config>
+	
+	
+	<configuration-properties doc:name="Configuration properties" doc:id="7597baca-4492-461a-ae8f-684e27c6b159" file="app1.yaml" />
+	<configuration-properties doc:name="Configuration properties" doc:id="d3090f65-9488-460e-9d77-a481cdfdc96f" file="app2.yaml" />
+	
+	<secure-properties:config name="Secure_Properties_Config" doc:name="Secure Properties Config" doc:id="9f1fe4ca-2fcb-4278-bc4e-d938b4a5a2a7" 
+	file="secure-app-dev.yaml" key="${mykey}" >
+		<secure-properties:encrypt algorithm="Blowfish" />
+	</secure-properties:config>
+	
+	<flow name="externalizing-secure-propertiesFlow" doc:id="a8853530-d2d2-403a-afd4-e8f6cb2cbf42" >
+		<http:listener doc:name="Listener" doc:id="87b24c0d-de7c-40b8-a6cd-fe884d49a39e" config-ref="HTTP_Listener_config" path="/test"/>
+		<set-payload value="#['Value of db.password = '++ Mule::p('secure::db.password')]" doc:name="Set Payload" doc:id="4ffa662f-e52d-49e4-8160-d5e3d3136823" />
+	</flow>
+</mule>
+
